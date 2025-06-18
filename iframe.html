@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子页面 - 使用 postMessage 交互</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            border: 2px solid #e74c3c;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+        #messages {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>子页面</h1>
+        <p>这个页面被嵌入在父页面中，通过 postMessage 与父页面通信。</p>
+        
+        <div>
+            <button id="sendToParent">发送消息给父页面</button>
+            <input type="text" id="messageInput" placeholder="输入要发送的消息">
+        </div>
+        
+        <div id="messages">
+            <p>来自父页面的消息将显示在这里...</p>
+        </div>
+    </div>
+
+    <script>
+        // Get references to DOM elements
+        const sendButton = document.getElementById('sendToParent');
+        const messageInput = document.getElementById('messageInput');
+        const messagesDiv = document.getElementById('messages');
+        
+        // Listen for messages from parent
+        window.addEventListener('message', function(event) {
+            // For security, verify the origin
+            // if (event.origin !== "http://localhost" && event.origin !== "https://yourdomain.com") {
+            //     return;
+            // }
+            
+            // Display the message from parent
+            const message = document.createElement('p');
+            message.textContent = `来自父页面的消息: ${event.data}`;
+            messagesDiv.appendChild(message);
+        });
+        
+        // Send message to parent when button is clicked
+        sendButton.addEventListener('click', function() {
+            const message = messageInput.value;
+            if (message) {
+                // Send message to parent window
+                // The '*' means any origin can receive, but you should specify the exact origin in production
+                window.parent.postMessage(message, '*');
+                
+                // Display the sent message
+                const sentMessage = document.createElement('p');
+                sentMessage.textContent = `发送给父页面的消息: ${message}`;
+                messagesDiv.appendChild(sentMessage);
+                
+                // Clear input
+                messageInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
