@@ -83,6 +83,9 @@
                 messageInput.value = '';
             }
         });
+        if (window.parent.postMessage) {
+            window.parent.postMessage('init message', '*');
+        }
     </script>
 </body>
 </html>
