@@ -40,6 +40,7 @@
         <p>这个页面包含一个 iframe，将加载子页面。</p>
         
         <div>
+            <button id="jumpOtherDomain">跳转域名</button>
             <button id="sendToChild">发送消息给子页面</button>
             <input type="text" id="messageInput" placeholder="输入要发送的消息">
         </div>
@@ -58,6 +59,11 @@
         const messageInput = document.getElementById('messageInput');
         const messagesDiv = document.getElementById('messages');
         const childFrame = document.getElementById('childFrame');
+        const jumpOtherDomain = document.getElementById('jumpOtherDomain');
+
+        jumpOtherDomain.addEventListener('click', function() {
+            window.location.href="https://www.baidu.com";
+        });
         
         // Listen for messages from child
         window.addEventListener('message', function(event) {
